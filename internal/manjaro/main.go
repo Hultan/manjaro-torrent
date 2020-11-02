@@ -15,11 +15,12 @@ type Manjaro struct {
 
 type Distribution struct {
 	Name    string
+	Type    string
 	Version string
 }
 
-func NewDistribution(name, version string) Distribution {
-	d := Distribution{name, version}
+func NewDistribution(name, distributionType, version string) Distribution {
+	d := Distribution{name, distributionType, version}
 	return d
 }
 
@@ -55,20 +56,20 @@ func (m *Manjaro) internalGetDistributions(doc *goquery.Document) {
 	// Find the official distributions
 	doc.Find("ul.dropdown-menu ul.dropdown-menu[aria-labelledby=\"Official\"] a").Each(func(i int, s *goquery.Selection) {
 		// For each item found, get the distribution
-		dist := m.getDistribution(s.Text())
+		dist := m.getDistribution(s.Text(), "Official")
 		m.Distributions[dist.Name] = dist
 	})
 	// Find the official distributions
 	doc.Find("ul.dropdown-menu ul.dropdown-menu[aria-labelledby=\"Community\"] a").Each(func(i int, s *goquery.Selection) {
 		// For each item found, get the distribution
-		dist := m.getDistribution(s.Text())
+		dist := m.getDistribution(s.Text(), "Community")
 		m.Distributions[dist.Name] = dist
 	})
 }
 
-func (m *Manjaro) getDistribution(text string) Distribution {
+func (m *Manjaro) getDistribution(text, distributionType string) Distribution {
 	index := strings.LastIndex(text, nonBreakingSpace)
 	name := strings.Trim(text[0:index], nonBreakingSpace)
 	version := strings.Trim(text[index:], nonBreakingSpace)
-	return NewDistribution(name, version)
+	return NewDistribution(name, distributionType, version)
 }

@@ -27,7 +27,7 @@ func (n *NotifyUser) NotifyUserIfNeeded(manjaroNew, manjaroOld *manjaro.Manjaro)
 			}
 			notify.DeliverNotification(notifier.Notification{
 				Title:   fmt.Sprintf("Manjaro %s has been added!", newVersion.Name),
-				Message: fmt.Sprintf("Add torrent for %s.\n\nNew version : %s", newVersion.Name, newVersion.Version),
+				Message: fmt.Sprintf("Add torrent for %s.\n\nNew version : %s (%s)", newVersion.Name, newVersion.Type, newVersion.Version),
 			})
 		}
 		if newVersion.Version != oldVersion.Version {
@@ -39,7 +39,7 @@ func (n *NotifyUser) NotifyUserIfNeeded(manjaroNew, manjaroOld *manjaro.Manjaro)
 			}
 			notify.DeliverNotification(notifier.Notification{
 				Title:   fmt.Sprintf("Manjaro %s has been updated!", newVersion.Name),
-				Message: fmt.Sprintf("Update torrent for %s.\n\nOld version : %s\nNew version : %s", newVersion.Name, newVersion.Version, oldVersion.Version),
+				Message: fmt.Sprintf("Update torrent for %s (%s).\n\nOld version : %s\nNew version : %s", newVersion.Name, newVersion.Type, newVersion.Version, oldVersion.Version),
 			})
 		}
 	}

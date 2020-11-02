@@ -10,9 +10,11 @@ import (
 )
 
 func main() {
-	pUrl := flag.String("url", "", "URL to be processed")
+	testFlag := flag.Bool("test", false,"Test against download.old2")
+	urlFlag := flag.String("url", "", "URL to be processed")
 	flag.Parse()
-	url := *pUrl
+	test := *testFlag
+	url := *urlFlag
 	if url == "" {
 		fmt.Fprintf(os.Stderr, "Error: empty URL!\n")
 		return
@@ -25,12 +27,23 @@ func main() {
 		return
 	}
 
-	manjaroNew := manjaro.New()
-	manjaroNew.ParseHtml(d.Path)
+	if test {
+		manjaroNew := manjaro.New()
+		manjaroNew.ParseHtml(d.Path)
 
-	manjaroOld := manjaro.New()
-	manjaroOld.ParseHtml(d.OldPath)
+		manjaroOld := manjaro.New()
+		manjaroOld.ParseHtml(d.OldPath + "2")
 
-	notify := notify_user.New()
-	notify.NotifyUserIfNeeded(manjaroNew, manjaroOld)
+		notify := notify_user.New()
+		notify.NotifyUserIfNeeded(manjaroNew, manjaroOld)
+	} else {
+		manjaroNew := manjaro.New()
+		manjaroNew.ParseHtml(d.Path)
+
+		manjaroOld := manjaro.New()
+		manjaroOld.ParseHtml(d.OldPath)
+
+		notify := notify_user.New()
+		notify.NotifyUserIfNeeded(manjaroNew, manjaroOld)
+	}
 }
